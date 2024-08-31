@@ -3,6 +3,7 @@ using R2API;
 using RoR2;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Networking;
 
 namespace ExamplePlugin
 {
@@ -54,7 +55,7 @@ namespace ExamplePlugin
             myItemDef = ScriptableObject.CreateInstance<ItemDef>();
 
             // Language Tokens, explained there https://risk-of-thunder.github.io/R2Wiki/Mod-Creation/Assets/Localization/
-            myItemDef.name = "ITEM_NEWBOOSTALLSTATS_NAME";
+            myItemDef.name = "GrowthNectarV2";
             myItemDef.nameToken = "ITEM_NEWBOOSTALLSTATS_NAME";
             myItemDef.pickupToken = "ITEM_NEWBOOSTALLSTATS_PICKUP";
             myItemDef.descriptionToken = "ITEM_NEWBOOSTALLSTATS_DESC";
@@ -99,6 +100,8 @@ namespace ExamplePlugin
             //GlobalEventManager.onCharacterDeathGlobal += GlobalEventManager_onCharacterDeathGlobal;
 
             AddLanguageTokens();
+
+            On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
         }
 
         //private void GlobalEventManager_onCharacterDeathGlobal(DamageReport report)
@@ -126,6 +129,17 @@ namespace ExamplePlugin
         //        }
         //    }
         //}
+
+        private void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
+        {
+            if (NetworkServer.active)
+            {
+                // Setting the behavior stacks to 1 or 0 may be more appropriate
+                // by checking if it exists in the inventory at all.
+                self.AddItemBehavior<GrowthNectarV2>(self.inventory.GetItemCount(myItemDef));
+            }
+            orig(self);
+        }
 
         private static void AddLanguageTokens()
         {
@@ -155,6 +169,7 @@ namespace ExamplePlugin
                 // And then drop our defined item in front of the player.
 
                 Log.Info($"Player pressed F2. Spawning our custom item at coordinates {transform.position}");
+                PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(myItemDef.itemIndex), transform.position, transform.forward * 20f);
                 PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(myItemDef.itemIndex), transform.position, transform.forward * 20f);
             }
         }
