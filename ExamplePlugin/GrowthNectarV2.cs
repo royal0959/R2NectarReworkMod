@@ -106,6 +106,11 @@ namespace ExamplePlugin
             UpdateAllMinions(stack);
             MasterSummon.onServerMasterSummonGlobal += OnServerMasterSummonGlobal;
         }
+        private void OnDisable()
+        {
+            MasterSummon.onServerMasterSummonGlobal -= OnServerMasterSummonGlobal;
+            UpdateAllMinions(0);
+        }
 
         private void FixedUpdate()
         {
@@ -143,7 +148,6 @@ namespace ExamplePlugin
                 Deployable component2 = component.GetComponent<Deployable>();
                 if ((bool)component2)
                 {
-                    // TODO: this should be its own DeployableSlot
                     body.master.AddDeployable(component2, DeployableSlot.DroneWeaponsDrone);
                 }
             }
@@ -161,7 +165,7 @@ namespace ExamplePlugin
                 CharacterBody characterBody = summonMasterInstance.GetBody();
                 if ((bool)characterBody)
                 {
-                    UpdateMinionInventory(characterBody);
+                    UpdateMinionInventory(characterBody, summonMasterInstance.inventory, stack);
                 }
             }
         }
@@ -189,38 +193,65 @@ namespace ExamplePlugin
                     CharacterBody characterBody = component.GetBody();
                     if ((bool)characterBody)
                     {
-                        UpdateMinionInventory(characterBody);
+                        UpdateMinionInventory(characterBody, component.inventory, newStack);
                     }
                 }
             }
             previousStack = newStack;
         }
 
-        private void UpdateMinionInventory(CharacterBody minionBody)
+        private void ResetMinionInventory(Inventory minionInventory)
         {
+            // TODO: replace with proper item
+            minionInventory.ResetItem(DLC1Content.Items.DroneWeaponsBoost);
+        }
+
+        private void UpdateMinionInventory(CharacterBody minionBody, Inventory minionInventory, int newStack)
+        {
+            if (!(bool)minionInventory)
+            {
+                ResetMinionInventory(minionInventory);
+                return;
+            }
+
+            if (newStack <= 0)
+            {
+                ResetMinionInventory(minionInventory);
+                return;
+            }
+
             CharacterBody.BodyFlags bodyFlags = minionBody.bodyFlags;
 
             // non-mechanical allies only
             if ((bodyFlags & CharacterBody.BodyFlags.Mechanical) != 0)
             {
+                ResetMinionInventory(minionInventory);
                 return;
             }
 
-            // TODO: give buff, scales with stack
+            // TODO: replace with proper item
+            int itemCount = minionInventory.GetItemCount(DLC1Content.Items.DroneWeaponsBoost);
+            if (itemCount < stack)
+            {
+                minionInventory.GiveItem(DLC1Content.Items.DroneWeaponsBoost, stack - itemCount);
+            }
+            else if (itemCount > stack)
+            {
+                minionInventory.RemoveItem(DLC1Content.Items.DroneWeaponsBoost, itemCount - stack);
+            }
 
-            // give random elite effect
-            Random random = new Random();
+            bool isDevotionSpawn = (bodyFlags & CharacterBody.BodyFlags.Devotion) != 0;
 
-            BuffIndex chosenEliteIndex = possibleEliteBuffsArray[random.Next(0, possibleEliteBuffsArray.Length)];
 
-            //Log.Info($"Chosen Buff Index: {chosenEliteIndex}; BuffDef name: {BuffCatalog.GetBuffDef(chosenEliteIndex).name}");
+            if (!isDevotionSpawn && !minionBody.isElite)
+            {
+                Random random = new Random();
+                BuffIndex chosenEliteIndex = possibleEliteBuffsArray[random.Next(0, possibleEliteBuffsArray.Length)];
 
-            minionBody.AddBuff(chosenEliteIndex);
-        }
+                //Log.Info($"Chosen Buff Index: {chosenEliteIndex}; BuffDef name: {BuffCatalog.GetBuffDef(chosenEliteIndex).name}");
 
-        private void OnDisable()
-        {
-            // Any clean-up logic, null check for `this.body` as necessary
+                minionBody.AddBuff(chosenEliteIndex);
+            }
         }
     }
 }

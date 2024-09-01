@@ -134,8 +134,6 @@ namespace ExamplePlugin
         {
             if (NetworkServer.active)
             {
-                // Setting the behavior stacks to 1 or 0 may be more appropriate
-                // by checking if it exists in the inventory at all.
                 self.AddItemBehavior<GrowthNectarV2>(self.inventory.GetItemCount(myItemDef));
             }
             orig(self);
