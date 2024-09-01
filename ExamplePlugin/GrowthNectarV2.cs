@@ -11,7 +11,7 @@ using UnityEngine.AddressableAssets;
 using HarmonyLib;
 using System.Linq;
 
-namespace ExamplePlugin
+namespace NectarRework
 {
     public class GrowthNectarV2 : CharacterBody.ItemBehavior
     {

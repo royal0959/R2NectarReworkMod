@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
-namespace ExamplePlugin
+namespace NectarRework
 {
     internal class CustomItems
     {

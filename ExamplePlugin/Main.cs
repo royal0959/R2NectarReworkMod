@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
-namespace ExamplePlugin
+namespace NectarRework
 {
     [BepInDependency(ItemAPI.PluginGUID)]
     [BepInDependency(LanguageAPI.PluginGUID)]
@@ -13,8 +13,8 @@ namespace ExamplePlugin
     public class Main : BaseUnityPlugin
     {
         public const string PluginGUID = PluginAuthor + "." + PluginName;
-        public const string PluginAuthor = "AuthorName";
-        public const string PluginName = "ExamplePlugin";
+        public const string PluginAuthor = "royal";
+        public const string PluginName = "GrowthNectarRework";
         public const string PluginVersion = "1.0.0";
 
 
