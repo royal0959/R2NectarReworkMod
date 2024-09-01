@@ -8,6 +8,8 @@ using System.Text;
 using UnityEngine;
 using Random = System.Random;
 using UnityEngine.AddressableAssets;
+using HarmonyLib;
+using System.Linq;
 
 namespace ExamplePlugin
 {
@@ -15,6 +17,24 @@ namespace ExamplePlugin
     {
         // copied from DroneWeaponsBehavior
         private const float display2Chance = 0.1f;
+
+        //private readonly EliteDef[] possibleEliteDefsArray = {
+        //        RoR2Content.Elites.Lightning,
+        //        RoR2Content.Elites.Ice,
+        //        RoR2Content.Elites.Fire,
+        //        DLC1Content.Elites.Earth
+        //};
+
+        // hardcode garbage because I don't know how to get BuffDef from EliteDef
+        private readonly string[] eliteBuffNames = {
+            "bdEliteLightning",
+            "bdEliteIce",
+            "bdEliteFire",
+            "bdEliteEarth",
+        };
+
+        private List<BuffIndex> possibleEliteBuffsList = new List<BuffIndex>();
+        private BuffIndex[] possibleEliteBuffsArray;
 
         private int previousStack;
 
@@ -32,10 +52,32 @@ namespace ExamplePlugin
 
         private bool hasSpawnedDrone;
 
-	    private float spawnDelay;
+        private float spawnDelay;
 
         private void Awake()
         {
+            for (int k = 0; k < BuffCatalog.eliteBuffIndices.Length; k++)
+            {
+                BuffIndex buffIndex = BuffCatalog.eliteBuffIndices[k];
+
+                string buffName = BuffCatalog.GetBuffDef(buffIndex).name;
+
+                if (!eliteBuffNames.Contains(buffName))
+                {
+                    continue;
+                }
+
+                Log.Info($"[GrowthNectarRework] added to pool {BuffCatalog.GetBuffDef(buffIndex).name}");
+                possibleEliteBuffsList.Add(buffIndex);
+            }
+
+            possibleEliteBuffsArray = possibleEliteBuffsList.ToArray();
+
+            //for (int k = 0; k < possibleEliteBuffsArray.Length; k++)
+            //{
+            //    Log.Info($"Buff Index: {k}; BuffDef name: {BuffCatalog.GetBuffDef(possibleEliteBuffsArray[k]).name}");
+            //}
+
             base.enabled = false;
         }
 
@@ -158,18 +200,21 @@ namespace ExamplePlugin
         {
             CharacterBody.BodyFlags bodyFlags = minionBody.bodyFlags;
 
-            // organic allies only
-            if ((bodyFlags & CharacterBody.BodyFlags.Mechanical) != 0) {
+            // non-mechanical allies only
+            if ((bodyFlags & CharacterBody.BodyFlags.Mechanical) != 0)
+            {
                 return;
             }
 
             // TODO: give buff, scales with stack
-                
+
             // give random elite effect
             Random random = new Random();
 
-            BuffIndex[] elitesArray = BuffCatalog.eliteBuffIndices;
-            BuffIndex chosenEliteIndex = elitesArray[random.Next(0, elitesArray.Length)];
+            BuffIndex chosenEliteIndex = possibleEliteBuffsArray[random.Next(0, possibleEliteBuffsArray.Length)];
+
+            //Log.Info($"Chosen Buff Index: {chosenEliteIndex}; BuffDef name: {BuffCatalog.GetBuffDef(chosenEliteIndex).name}");
+
             minionBody.AddBuff(chosenEliteIndex);
         }
 

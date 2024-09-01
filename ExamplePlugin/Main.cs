@@ -146,7 +146,7 @@ namespace ExamplePlugin
             //The Name should be self explanatory
             LanguageAPI.Add("ITEM_NEWBOOSTALLSTATS_NAME", "Growth Nectar v2");
             //The Pickup is the short text that appears when you first pick this up. This text should be short and to the point, nuimbers are generally ommited.
-            LanguageAPI.Add("ITEM_NEWBOOSTALLSTATS_PICKUP", "Cool shits");
+            LanguageAPI.Add("ITEM_NEWBOOSTALLSTATS_PICKUP", "Summon a <style=cIsUtility>Greater Wisp</style>. All <style=cIsUtility>organic</style> allies are <style=cIsDamage>stronger</style> and <style=cIsDamage>Elite</style>.");
             //The Description is where you put the actual numbers and give an advanced description.
             LanguageAPI.Add("ITEM_NEWBOOSTALLSTATS_DESC",
                 "Gain an allied <style=cIsUtility>Greater Wisp</style> that respawns every 30 seconds. All <style=cIsUtility>NON-MECHANICAL</style> allies will gain  <style=cIsDamage>+200%</style> <style=cStack>(+200% per stack)</style> damage and <style=cIsUtility>+150%</style> <style=cStack>(+150% per stack)</style> health and a random <style=cIsDamage>Elite</style> status.\r\n");
