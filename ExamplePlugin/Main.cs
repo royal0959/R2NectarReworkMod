@@ -25,22 +25,22 @@ namespace ExamplePlugin
         }
 
         // The Update() method is run on every frame of the game.
-        private void Update()
-        {
-            // This if statement checks if the player has currently pressed F2.
-            if (Input.GetKeyDown(KeyCode.F2))
-            {
-                // Get the player body to use a position:
-                var transform = PlayerCharacterMasterController.instances[0].master.GetBodyObject().transform;
+        //private void Update()
+        //{
+        //    // This if statement checks if the player has currently pressed F2.
+        //    if (Input.GetKeyDown(KeyCode.F2))
+        //    {
+        //        // Get the player body to use a position:
+        //        var transform = PlayerCharacterMasterController.instances[0].master.GetBodyObject().transform;
 
-                // And then drop our defined item in front of the player.
+        //        // And then drop our defined item in front of the player.
 
-                Log.Info($"Player pressed F2. Spawning our custom item at coordinates {transform.position}");
+        //        Log.Info($"Player pressed F2. Spawning our custom item at coordinates {transform.position}");
 
-                PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(DLC2Content.Items.BoostAllStats.itemIndex), transform.position, transform.forward * 20f);
-                PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(RoR2Content.Items.BeetleGland.itemIndex), transform.position, transform.forward * 20f);
+        //        PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(DLC2Content.Items.BoostAllStats.itemIndex), transform.position, transform.forward * 20f);
+        //        PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(RoR2Content.Items.BeetleGland.itemIndex), transform.position, transform.forward * 20f);
 
-            }
-        }
+        //    }
+        //}
     }
 }

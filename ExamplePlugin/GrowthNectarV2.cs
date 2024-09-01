@@ -195,7 +195,6 @@ namespace ExamplePlugin
 
         private void ResetMinionInventory(Inventory minionInventory)
         {
-            // TODO: replace with proper item
             minionInventory.ResetItem(RoR2Content.Items.BoostDamage);
             minionInventory.ResetItem(RoR2Content.Items.BoostHp);
         }
@@ -223,8 +222,6 @@ namespace ExamplePlugin
                 return;
             }
 
-            // TODO: replace with proper item
-            //int itemCount = minionInventory.GetItemCount(DLC1Content.Items.DroneWeaponsBoost);
             int itemCount = minionInventory.GetItemCount(RoR2Content.Items.BoostDamage);
 
             // items give +10% to their perspective stat, we need to give the correct stack count with this in mind

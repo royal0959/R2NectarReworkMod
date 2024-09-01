@@ -11,8 +11,6 @@ namespace ExamplePlugin
 {
     internal class CustomItems
     {
-        //internal static ItemDef GrowthNectarV2;
-
         public static void Init()
         {
             //CreateGrowthNectarV2();
@@ -24,10 +22,6 @@ namespace ExamplePlugin
 
         private static void OverrideDefaultBehavior()
         {
-            //On.RoR2.CharacterBody.UpdateBoostAllStatsTimer += OnUpdateBoostAllStatsTimer;
-            //On.RoR2.CharacterBody.SetBoostAllStatsStartTimer += OnSetBoostAllStatsStartTimer;
-            //On.RoR2.CharacterBody.SetBoostAllStatsCoolDownTimer += OnSetBoostAllStatsCoolDownTimer;
-
             IL.RoR2.CharacterBody.RecalculateStats += (il) =>
             {
                 ILCursor c = new ILCursor(il);
@@ -52,22 +46,6 @@ namespace ExamplePlugin
                 }
             };
         }
-
-        //public static void OnUpdateBoostAllStatsTimer(On.RoR2.CharacterBody.orig_UpdateBoostAllStatsTimer orig, CharacterBody self, float t)
-        //{
-        //    Log.Info("Cancelled");
-
-        //}
-
-        //public static void OnSetBoostAllStatsStartTimer(On.RoR2.CharacterBody.orig_SetBoostAllStatsStartTimer orig, CharacterBody self, float t)
-        //{
-        //    Log.Info("Cancelled");
-        //}
-
-        //public static void OnSetBoostAllStatsCoolDownTimer(On.RoR2.CharacterBody.orig_SetBoostAllStatsCoolDownTimer orig, CharacterBody self, float t)
-        //{
-        //    Log.Info("Cancelled");
-        //}
 
         private static void CharacterBody_OnInventoryChanged(On.RoR2.CharacterBody.orig_OnInventoryChanged orig, CharacterBody self)
         {
@@ -108,14 +86,6 @@ namespace ExamplePlugin
 
         private static void AddLanguageTokens()
         {
-            //LanguageAPI.Add("ITEM_NEWBOOSTALLSTATS_NAME", "Growth Nectar v2");
-            //LanguageAPI.Add("ITEM_NEWBOOSTALLSTATS_PICKUP", "Summon a <style=cIsUtility>Greater Wisp</style>. All <style=cIsUtility>ORAGANIC</style> allies are <style=cIsDamage>stronger</style> and <style=cIsDamage>Elite</style>.");
-            //LanguageAPI.Add("ITEM_NEWBOOSTALLSTATS_DESC",
-            //    "Gain an allied <style=cIsUtility>Greater Wisp</style> that respawns every 30 seconds. All <style=cIsUtility>ORGANIC</style> allies will gain  <style=cIsDamage>+200%</style> <style=cStack>(+200% per stack)</style> damage and <style=cIsUtility>+150%</style> <style=cStack>(+150% per stack)</style> health and a random <style=cIsDamage>Elite</style> status.\r\n");
-            //LanguageAPI.Add("ITEM_NEWBOOSTALLSTATS_LORE",
-            //    "Hello everybody my name is markiplier welcome to five nights at freddy's.");
-
-            //LanguageAPI.Add("ITEM_BOOSTALLSTATS_NAME", "Growth Nectar");
             LanguageAPI.Add("ITEM_BOOSTALLSTATS_PICKUP", "Summon a <style=cIsUtility>Greater Wisp</style>. All <style=cIsUtility>organic</style> allies are <style=cIsDamage>stronger</style> and <style=cIsDamage>Elite</style>.");
             LanguageAPI.Add("ITEM_BOOSTALLSTATS_DESC",
                 "Gain an allied <style=cIsUtility>Greater Wisp</style> that respawns every 30 seconds. All <style=cIsUtility>ORGANIC</style> allies will gain  <style=cIsDamage>+200%</style> <style=cStack>(+200% per stack)</style> damage and <style=cIsUtility>+150%</style> <style=cStack>(+150% per stack)</style> health and a random <style=cIsDamage>Elite</style> status.\r\n");
