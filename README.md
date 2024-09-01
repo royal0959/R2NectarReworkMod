@@ -2,4 +2,4 @@
 
 ![new stats](new_stats.png)
 
-Idea by colonel
+Idea & icon art by colonel
