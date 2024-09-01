@@ -21,7 +21,7 @@ namespace ExamplePlugin
         public void Awake()
         {
             Log.Init(Logger);
-            Items.Init();
+            CustomItems.Init();
         }
 
         // The Update() method is run on every frame of the game.
@@ -36,8 +36,8 @@ namespace ExamplePlugin
                 // And then drop our defined item in front of the player.
 
                 Log.Info($"Player pressed F2. Spawning our custom item at coordinates {transform.position}");
-               
-                PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(Items.GrowthNectarV2.itemIndex), transform.position, transform.forward * 20f);
+
+                PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(DLC2Content.Items.BoostAllStats.itemIndex), transform.position, transform.forward * 20f);
                 PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(RoR2Content.Items.BeetleGland.itemIndex), transform.position, transform.forward * 20f);
 
             }

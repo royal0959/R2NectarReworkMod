@@ -15,9 +15,6 @@ namespace ExamplePlugin
 {
     public class GrowthNectarV2 : CharacterBody.ItemBehavior
     {
-        // copied from DroneWeaponsBehavior
-        private const float display2Chance = 0.1f;
-
         //private readonly EliteDef[] possibleEliteDefsArray = {
         //        RoR2Content.Elites.Lightning,
         //        RoR2Content.Elites.Ice,
@@ -39,22 +36,15 @@ namespace ExamplePlugin
         private List<BuffIndex> possibleEliteBuffsList = new List<BuffIndex>();
         private BuffIndex[] possibleEliteBuffsArray;
 
+        // copied from DroneWeaponsBehavior
         private int previousStack;
-
         private CharacterSpawnCard droneSpawnCard;
-
         private Xoroshiro128Plus rng;
-
         private DirectorPlacementRule placementRule;
-
         private const float minSpawnDist = 3f;
-
         private const float maxSpawnDist = 40f;
-
         private const float spawnRetryDelay = 1f;
-
         private bool hasSpawnedDrone;
-
         private float spawnDelay;
 
         private void Awake()
@@ -206,7 +196,8 @@ namespace ExamplePlugin
         private void ResetMinionInventory(Inventory minionInventory)
         {
             // TODO: replace with proper item
-            minionInventory.ResetItem(DLC1Content.Items.DroneWeaponsBoost);
+            minionInventory.ResetItem(RoR2Content.Items.BoostDamage);
+            minionInventory.ResetItem(RoR2Content.Items.BoostHp);
         }
 
         private void UpdateMinionInventory(CharacterBody minionBody, Inventory minionInventory, int newStack)
