@@ -1,8 +1,8 @@
 ﻿{
 	"name": "GrowthNectarRework",
-	"version_number": "1.0.0",
+	"version_number": "1.0.25",
 	"website_url": "https://github.com/royal0959/R2NectarReworkMod",
-	"description": "Reworks Growth Nectar into Drone Parts for all organic allies. Includes literally everything that's not mechanical so even Gooboos, Alpha Constructs & Happiest Mask spawns can benefit from it",
+	"description": "Reworks Growth Nectar to greatly buff all organic allies",
 	"dependencies": [
 		"bbepis-BepInExPack-5.4.2108",
 		"RiskofThunder-HookGenPatcher-1.2.3",

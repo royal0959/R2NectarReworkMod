@@ -1,3 +1,6 @@
 # Growth Nectar Rework
+(https://github.com/royal0959/R2NectarReworkMod/blob/main/new_stats.png)
 
-Reworks Growth Nectar into Drone Parts for all organic allies. Includes literally everything that's not mechanical so even Gooboos, Alpha Constructs & Happiest Mask spawns can benefit from it
+All non-mechanical allies gain +200% damage and +150% health for each stack, while also being granted a random Tier 1 elite buff
+
+Idea & mod icon art by colonel
