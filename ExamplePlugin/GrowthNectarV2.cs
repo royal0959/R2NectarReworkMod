@@ -26,12 +26,15 @@ namespace ExamplePlugin
         //};
 
         // hardcode garbage because I don't know how to get BuffDef from EliteDef
-        private readonly string[] eliteBuffNames = {
+        private readonly string[] ELITE_BUFF_NAMES = {
             "bdEliteLightning",
             "bdEliteIce",
             "bdEliteFire",
             "bdEliteEarth",
         };
+
+        private const int DAMAGE_ITEM_STACK_COUNT = 20; // 200%
+        private const int HEALTH_ITEM_STACK_COUNT = 15; // 150%
 
         private List<BuffIndex> possibleEliteBuffsList = new List<BuffIndex>();
         private BuffIndex[] possibleEliteBuffsArray;
@@ -62,7 +65,7 @@ namespace ExamplePlugin
 
                 string buffName = BuffCatalog.GetBuffDef(buffIndex).name;
 
-                if (!eliteBuffNames.Contains(buffName))
+                if (!ELITE_BUFF_NAMES.Contains(buffName))
                 {
                     continue;
                 }
@@ -230,18 +233,34 @@ namespace ExamplePlugin
             }
 
             // TODO: replace with proper item
-            int itemCount = minionInventory.GetItemCount(DLC1Content.Items.DroneWeaponsBoost);
+            //int itemCount = minionInventory.GetItemCount(DLC1Content.Items.DroneWeaponsBoost);
+            int itemCount = minionInventory.GetItemCount(RoR2Content.Items.BoostDamage);
+
+            // items give +10% to their perspective stat, we need to give the correct stack count with this in mind
             if (itemCount < stack)
             {
-                minionInventory.GiveItem(DLC1Content.Items.DroneWeaponsBoost, stack - itemCount);
+                int baseCount = (stack - itemCount);
+                int damageStackCount = baseCount * DAMAGE_ITEM_STACK_COUNT;
+                int healthStackCount = baseCount * HEALTH_ITEM_STACK_COUNT;
+
+                minionInventory.GiveItem(RoR2Content.Items.BoostDamage, damageStackCount);
+                minionInventory.GiveItem(RoR2Content.Items.BoostHp, healthStackCount);
+
+                Log.Info($"Damage items count: {minionInventory.GetItemCount(RoR2Content.Items.BoostDamage)}; Health items count: {minionInventory.GetItemCount(RoR2Content.Items.BoostHp)}");
             }
             else if (itemCount > stack)
             {
-                minionInventory.RemoveItem(DLC1Content.Items.DroneWeaponsBoost, itemCount - stack);
+                int baseCount = (itemCount - stack);
+                int damageStackCount = baseCount * DAMAGE_ITEM_STACK_COUNT;
+                int healthStackCount = baseCount * HEALTH_ITEM_STACK_COUNT;
+
+                minionInventory.RemoveItem(RoR2Content.Items.BoostDamage, damageStackCount);
+                minionInventory.GiveItem(RoR2Content.Items.BoostHp, healthStackCount);
+
+                Log.Info($"Damage items count: {minionInventory.GetItemCount(RoR2Content.Items.BoostDamage)}; Health items count: {minionInventory.GetItemCount(RoR2Content.Items.BoostHp)}");
             }
 
             bool isDevotionSpawn = (bodyFlags & CharacterBody.BodyFlags.Devotion) != 0;
-
 
             if (!isDevotionSpawn && !minionBody.isElite)
             {
