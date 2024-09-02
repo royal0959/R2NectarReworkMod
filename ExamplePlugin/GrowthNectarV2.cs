@@ -23,18 +23,26 @@ namespace NectarRework
         //};
 
         // hardcode garbage because I don't know how to get BuffDef from EliteDef
-        private readonly string[] ELITE_BUFF_NAMES = {
-            "bdEliteLightning",
-            "bdEliteIce",
-            "bdEliteFire",
-            "bdEliteEarth",
+        //private readonly string[] ELITE_BUFF_NAMES = {
+        //    "bdEliteLightning",
+        //    "bdEliteIce",
+        //    "bdEliteFire",
+        //    "bdEliteEarth",
+        //};
+
+        private readonly EquipmentDef[] POSSIBLE_ELITE_EQUIPMENTS =
+        {
+            RoR2Content.Elites.Lightning.eliteEquipmentDef,
+             RoR2Content.Elites.Ice.eliteEquipmentDef,
+             RoR2Content.Elites.Fire.eliteEquipmentDef,
+             DLC1Content.Elites.Earth.eliteEquipmentDef
         };
 
         private const int DAMAGE_ITEM_STACK_COUNT = 20; // 200%
         private const int HEALTH_ITEM_STACK_COUNT = 15; // 150%
 
-        private List<BuffIndex> possibleEliteBuffsList = new List<BuffIndex>();
-        private BuffIndex[] possibleEliteBuffsArray;
+        //private List<BuffIndex> possibleEliteBuffsList = new List<BuffIndex>();
+        //private BuffIndex[] possibleEliteBuffsArray;
 
         // copied from DroneWeaponsBehavior
         private int previousStack;
@@ -47,24 +55,27 @@ namespace NectarRework
         private bool hasSpawnedDrone;
         private float spawnDelay;
 
+        // TODO: give Greater Wisp some speed & maybe fire rate item1
+        // TODO: give allies unique buff item
+
         private void Awake()
         {
-            for (int k = 0; k < BuffCatalog.eliteBuffIndices.Length; k++)
-            {
-                BuffIndex buffIndex = BuffCatalog.eliteBuffIndices[k];
+            //for (int k = 0; k < BuffCatalog.eliteBuffIndices.Length; k++)
+            //{
+            //    BuffIndex buffIndex = BuffCatalog.eliteBuffIndices[k];
 
-                string buffName = BuffCatalog.GetBuffDef(buffIndex).name;
+            //    string buffName = BuffCatalog.GetBuffDef(buffIndex).name;
 
-                if (!ELITE_BUFF_NAMES.Contains(buffName))
-                {
-                    continue;
-                }
+            //    if (!ELITE_BUFF_NAMES.Contains(buffName))
+            //    {
+            //        continue;
+            //    }
 
-                Log.Info($"[GrowthNectarRework] added to pool {BuffCatalog.GetBuffDef(buffIndex).name}");
-                possibleEliteBuffsList.Add(buffIndex);
-            }
+            //    Log.Info($"[GrowthNectarRework] added to pool {BuffCatalog.GetBuffDef(buffIndex).name}");
+            //    possibleEliteBuffsList.Add(buffIndex);
+            //}
 
-            possibleEliteBuffsArray = possibleEliteBuffsList.ToArray();
+            //possibleEliteBuffsArray = possibleEliteBuffsList.ToArray();
 
             //for (int k = 0; k < possibleEliteBuffsArray.Length; k++)
             //{
@@ -79,12 +90,6 @@ namespace NectarRework
             // Any initialisation logic, null check for `this.body` as necessary
             // `this.stack` is still unassigned at this point so use `this.body.inventory`
 
-            //Random random = new Random();
-
-            //BuffIndex[] elitesArray = BuffCatalog.eliteBuffIndices;
-            //BuffIndex chosenEliteIndex = elitesArray[random.Next(0, elitesArray.Length)];
-            //this.body.AddBuff(chosenEliteIndex);
-
             ulong seed = Run.instance.seed ^ (ulong)Run.instance.stageClearCount;
             rng = new Xoroshiro128Plus(seed);
             droneSpawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>("RoR2/Base/GreaterWisp/cscGreaterWisp.asset").WaitForCompletion();
@@ -96,7 +101,8 @@ namespace NectarRework
                 maxDistance = 40f,
                 spawnOnTarget = base.transform
             };
-            UpdateAllMinions(stack);
+
+            UpdateAllMinions(this.body.inventory.GetItemCount(DLC2Content.Items.BoostAllStats));
             MasterSummon.onServerMasterSummonGlobal += OnServerMasterSummonGlobal;
         }
         private void OnDisable()
@@ -253,11 +259,12 @@ namespace NectarRework
             if (!isDevotionSpawn && !minionBody.isElite)
             {
                 Random random = new Random();
-                BuffIndex chosenEliteIndex = possibleEliteBuffsArray[random.Next(0, possibleEliteBuffsArray.Length)];
+                EquipmentDef chosenEliteEquipment = POSSIBLE_ELITE_EQUIPMENTS[random.Next(0, POSSIBLE_ELITE_EQUIPMENTS.Length)];
 
-                //Log.Info($"Chosen Buff Index: {chosenEliteIndex}; BuffDef name: {BuffCatalog.GetBuffDef(chosenEliteIndex).name}");
+                //Log.Info($"Chosen elite equipment: {chosenEliteEquipment}; elite equipment index: {chosenEliteEquipment.equipmentIndex}");
 
-                minionBody.AddBuff(chosenEliteIndex);
+                minionInventory.SetEquipmentIndex(chosenEliteEquipment.equipmentIndex);
+                //minionBody.AddBuff(chosenEliteIndex);
             }
         }
     }
