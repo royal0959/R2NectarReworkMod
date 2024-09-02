@@ -55,8 +55,8 @@ namespace NectarRework
         private bool hasSpawnedDrone;
         private float spawnDelay;
 
+        // TODO: fix stack not updating for existing allies when a new stack is added
         // TODO: give Greater Wisp some speed & maybe fire rate item1
-        // TODO: give allies unique buff item
 
         private void Awake()
         {
@@ -105,6 +105,7 @@ namespace NectarRework
             UpdateAllMinions(this.body.inventory.GetItemCount(DLC2Content.Items.BoostAllStats));
             MasterSummon.onServerMasterSummonGlobal += OnServerMasterSummonGlobal;
         }
+
         private void OnDisable()
         {
             MasterSummon.onServerMasterSummonGlobal -= OnServerMasterSummonGlobal;
@@ -201,8 +202,9 @@ namespace NectarRework
 
         private void ResetMinionInventory(Inventory minionInventory)
         {
-            minionInventory.ResetItem(RoR2Content.Items.BoostDamage);
-            minionInventory.ResetItem(RoR2Content.Items.BoostHp);
+            //minionInventory.ResetItem(RoR2Content.Items.BoostDamage);
+            //minionInventory.ResetItem(RoR2Content.Items.BoostHp);
+            minionInventory.ResetItem(CustomItems.ItemOrganicAllyBuff);
         }
 
         private void UpdateMinionInventory(CharacterBody minionBody, Inventory minionInventory, int newStack)
@@ -233,25 +235,31 @@ namespace NectarRework
             // items give +10% to their perspective stat, we need to give the correct stack count with this in mind
             if (itemCount < stack)
             {
-                int baseCount = (stack - itemCount);
-                int damageStackCount = baseCount * DAMAGE_ITEM_STACK_COUNT;
-                int healthStackCount = baseCount * HEALTH_ITEM_STACK_COUNT;
+                int count = (stack - itemCount);
+                //int damageStackCount = baseCount * DAMAGE_ITEM_STACK_COUNT;
+                //int healthStackCount = baseCount * HEALTH_ITEM_STACK_COUNT;
 
-                minionInventory.GiveItem(RoR2Content.Items.BoostDamage, damageStackCount);
-                minionInventory.GiveItem(RoR2Content.Items.BoostHp, healthStackCount);
+                minionInventory.GiveItem(CustomItems.ItemOrganicAllyBuff, count);
+                Log.Info($"Buff stack: {minionInventory.GetItemCount(CustomItems.ItemOrganicAllyBuff)}");
 
-                Log.Info($"Damage items count: {minionInventory.GetItemCount(RoR2Content.Items.BoostDamage)}; Health items count: {minionInventory.GetItemCount(RoR2Content.Items.BoostHp)}");
+                //minionInventory.GiveItem(RoR2Content.Items.BoostDamage, damageStackCount);
+                //minionInventory.GiveItem(RoR2Content.Items.BoostHp, healthStackCount);
+
+                //Log.Info($"Damage items count: {minionInventory.GetItemCount(RoR2Content.Items.BoostDamage)}; Health items count: {minionInventory.GetItemCount(RoR2Content.Items.BoostHp)}");
             }
             else if (itemCount > stack)
             {
-                int baseCount = (itemCount - stack);
-                int damageStackCount = baseCount * DAMAGE_ITEM_STACK_COUNT;
-                int healthStackCount = baseCount * HEALTH_ITEM_STACK_COUNT;
+                int count = (itemCount - stack);
+                //int damageStackCount = baseCount * DAMAGE_ITEM_STACK_COUNT;
+                //int healthStackCount = baseCount * HEALTH_ITEM_STACK_COUNT;
 
-                minionInventory.RemoveItem(RoR2Content.Items.BoostDamage, damageStackCount);
-                minionInventory.GiveItem(RoR2Content.Items.BoostHp, healthStackCount);
+                minionInventory.GiveItem(CustomItems.ItemOrganicAllyBuff, count);
+                Log.Info($"Buff stack: {minionInventory.GetItemCount(CustomItems.ItemOrganicAllyBuff)}");
 
-                Log.Info($"Damage items count: {minionInventory.GetItemCount(RoR2Content.Items.BoostDamage)}; Health items count: {minionInventory.GetItemCount(RoR2Content.Items.BoostHp)}");
+                //minionInventory.RemoveItem(RoR2Content.Items.BoostDamage, damageStackCount);
+                //minionInventory.GiveItem(RoR2Content.Items.BoostHp, healthStackCount);
+
+                //Log.Info($"Damage items count: {minionInventory.GetItemCount(RoR2Content.Items.BoostDamage)}; Health items count: {minionInventory.GetItemCount(RoR2Content.Items.BoostHp)}");
             }
 
             bool isDevotionSpawn = (bodyFlags & CharacterBody.BodyFlags.Devotion) != 0;

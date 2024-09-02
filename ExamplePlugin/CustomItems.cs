@@ -11,9 +11,15 @@ namespace NectarRework
 {
     internal class CustomItems
     {
+
+        public static ItemDef ItemOrganicAllyBuff;
+
+
         public static void Init()
         {
             //CreateGrowthNectarV2();
+            CreateOrganicAllyBuff();
+
             OverrideDefaultBehavior();
 
             AddLanguageTokens();
@@ -51,11 +57,45 @@ namespace NectarRework
         {
             if (NetworkServer.active)
             {
+                self.AddItemBehavior<OrganicAllyBuff>(self.inventory.GetItemCount(ItemOrganicAllyBuff));
+
                 // override behavior
                 self.AddItemBehavior<GrowthNectarV2>(self.inventory.GetItemCount(DLC2Content.Items.BoostAllStats));
             }
             orig(self);
         }
+
+
+        private static void CreateOrganicAllyBuff()
+        {
+            ItemOrganicAllyBuff = new ItemDef
+            {
+                name = "OrganicAllyBuff",
+                tier = ItemTier.NoTier,
+                //_itemTierDef = Addressables.LoadAssetAsync<ItemTierDef>("RoR2/Base/Common/Tier3Def.asset").WaitForCompletion(),
+                pickupModelPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab").WaitForCompletion(),
+                pickupIconSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion(),
+                nameToken = "ITEM_ORGANICALLYBUFF_NAME",
+                pickupToken = "ITEM_ORGANICALLYBUFF_PICKUP",
+                descriptionToken = "ITEM_ORGANICALLYBUFF_DESC",
+                loreToken = "ITEM_ORGANICALLYBUFF_LORE",
+                tags = new[]
+                {
+                    ItemTag.CannotCopy,
+                    ItemTag.CannotDuplicate,
+                    ItemTag.CannotSteal,
+                },
+
+                canRemove = false,
+                hidden = true
+            };
+
+            var displayRules = new ItemDisplayRuleDict(null);
+
+            var itemIndex = new CustomItem(ItemOrganicAllyBuff, displayRules);
+            ItemAPI.Add(itemIndex);
+        }
+
 
         //private static void CreateGrowthNectarV2()
         //{
