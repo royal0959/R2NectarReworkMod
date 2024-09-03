@@ -81,8 +81,10 @@ namespace NectarRework
                 loreToken = "ITEM_ORGANICALLYBUFF_LORE",
                 tags = new[]
                 {
+                    ItemTag.WorldUnique,
                     ItemTag.CannotCopy,
                     ItemTag.CannotDuplicate,
+                    ItemTag.BrotherBlacklist,
                     ItemTag.CannotSteal,
                 },
 
