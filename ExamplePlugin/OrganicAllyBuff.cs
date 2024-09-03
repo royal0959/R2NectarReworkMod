@@ -10,6 +10,7 @@ using Random = System.Random;
 using UnityEngine.AddressableAssets;
 using HarmonyLib;
 using System.Linq;
+using MonoMod.Cil;
 
 namespace NectarRework
 {
@@ -20,16 +21,15 @@ namespace NectarRework
 
         private void Awake()
         {
-            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
+            GameModeCatalog.availability.CallWhenAvailable(new Action(PostLoad));
 
             base.enabled = false;
         }
 
-        //private void OnEnable()
-        //{
-        //    // Any initialisation logic, null check for `this.body` as necessary
-        //    // `this.stack` is still unassigned at this point so use `this.body.inventory`
-        //}
+        public void PostLoad()
+        {
+            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
+        }
 
         private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
@@ -48,15 +48,5 @@ namespace NectarRework
             args.healthMultAdd += HEALTH_MULTIPLIER * stack;
             args.damageMultAdd += DAMAGE_MULTIPLIER * stack;
         }
-
-        //private void OnDisable()
-        //{
-
-        //}
-
-        //private void FixedUpdate()
-        //{
-
-        //}
     }
 }

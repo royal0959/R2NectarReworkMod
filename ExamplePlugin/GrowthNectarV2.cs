@@ -71,9 +71,7 @@ namespace NectarRework
 
         private void Awake()
         {
-            wispDeployable = DeployableAPI.RegisterDeployableSlot(GetWishDeployableSlotLimit);
-
-            On.RoR2.Util.GetBestBodyName += Util_GetBestBodyName;
+            GameModeCatalog.availability.CallWhenAvailable(new Action(PostLoad));
 
             //for (int k = 0; k < BuffCatalog.eliteBuffIndices.Length; k++)
             //{
@@ -98,6 +96,12 @@ namespace NectarRework
             //}
 
             base.enabled = false;
+        }
+
+        public void PostLoad()
+        {
+            wispDeployable = DeployableAPI.RegisterDeployableSlot(GetWishDeployableSlotLimit);
+            On.RoR2.Util.GetBestBodyName += Util_GetBestBodyName;
         }
 
         // rename wisp
