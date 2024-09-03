@@ -1,3 +1,7 @@
+## 1.1.2
+
+- Embedded new stats in Thunderstore description
+
 ## 1.1.1
 
 - Fix allies being buffed way more than are intended to be
