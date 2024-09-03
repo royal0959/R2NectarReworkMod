@@ -1,3 +1,9 @@
+## 1.1.0
+
+- Summoned Greater Wisp is now named Guardian Wisp
+- Made Guardian Wisp move & attack faster
+- Made ally stat boost use a new item instead of using BoostHp & BoostDamage
+ 
 ## 1.0.3
 
 - Fix elite allies not being given their elite appearance
