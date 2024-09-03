@@ -10,6 +10,7 @@ using Random = System.Random;
 using UnityEngine.AddressableAssets;
 using HarmonyLib;
 using System.Linq;
+using UnityEngine.Events;
 
 namespace NectarRework
 {
@@ -38,8 +39,8 @@ namespace NectarRework
              DLC1Content.Elites.Earth.eliteEquipmentDef
         };
 
-        private const int DAMAGE_ITEM_STACK_COUNT = 20; // 200%
-        private const int HEALTH_ITEM_STACK_COUNT = 15; // 150%
+        //private const int DAMAGE_ITEM_STACK_COUNT = 20; // 200%
+        //private const int HEALTH_ITEM_STACK_COUNT = 15; // 150%
 
         //private List<BuffIndex> possibleEliteBuffsList = new List<BuffIndex>();
         //private BuffIndex[] possibleEliteBuffsArray;
@@ -49,17 +50,28 @@ namespace NectarRework
         private CharacterSpawnCard droneSpawnCard;
         private Xoroshiro128Plus rng;
         private DirectorPlacementRule placementRule;
-        private const float minSpawnDist = 3f;
-        private const float maxSpawnDist = 40f;
-        private const float spawnRetryDelay = 1f;
-        private bool hasSpawnedDrone;
-        private float spawnDelay;
 
-        // TODO: fix stack not updating for existing allies when a new stack is added
-        // TODO: give Greater Wisp some speed & maybe fire rate item1
+        private const float spawnRetryDelay = 1f;
+        private const float spawnCooldown = 30f;
+
+        private float spawnTimer = 0f;
+
+        DeployableSlot wispDeployable;
+
+        //private bool hasSpawnedDrone;
+        //private float spawnDelay;
+
+        public int GetWishDeployableSlotLimit(CharacterMaster self, int deployableCountMultiplier)
+        {
+            return 1 * deployableCountMultiplier;
+        }
 
         private void Awake()
         {
+
+            wispDeployable = DeployableAPI.RegisterDeployableSlot(GetWishDeployableSlotLimit);
+
+
             //for (int k = 0; k < BuffCatalog.eliteBuffIndices.Length; k++)
             //{
             //    BuffIndex buffIndex = BuffCatalog.eliteBuffIndices[k];
@@ -114,8 +126,32 @@ namespace NectarRework
 
         private void FixedUpdate()
         {
-            spawnDelay -= Time.fixedDeltaTime;
-            if (!hasSpawnedDrone && (bool)body && spawnDelay <= 0f)
+            if (previousStack != stack)
+            {
+                UpdateAllMinions(stack);
+            }
+
+            //spawnDelay -= Time.fixedDeltaTime;
+            //if (!hasSpawnedDrone && (bool)body && spawnDelay <= 0f)
+            //{
+            //    TrySpawnDrone();
+            //}
+
+            CharacterMaster bodyMaster = base.body.master;
+            if (!bodyMaster)
+            {
+                return;
+            }
+
+            int deployableCount = bodyMaster.GetDeployableCount(wispDeployable);
+
+            if (deployableCount >= 1)
+            {
+                return;
+            }
+
+            spawnTimer -= Time.fixedDeltaTime;
+            if (spawnTimer <= 0f)
             {
                 TrySpawnDrone();
             }
@@ -123,9 +159,9 @@ namespace NectarRework
 
         private void TrySpawnDrone()
         {
-            if (!body.master.IsDeployableLimited(DeployableSlot.DroneWeaponsDrone))
+            if (!body.master.IsDeployableLimited(wispDeployable))
             {
-                spawnDelay = 1f;
+                spawnTimer = spawnRetryDelay;
                 DirectorSpawnRequest directorSpawnRequest = new DirectorSpawnRequest(droneSpawnCard, placementRule, rng);
                 directorSpawnRequest.summonerBodyObject = base.gameObject;
                 directorSpawnRequest.onSpawnedServer = OnSummonedSpawned;
@@ -135,7 +171,10 @@ namespace NectarRework
 
         private void OnSummonedSpawned(SpawnCard.SpawnResult spawnResult)
         {
-            hasSpawnedDrone = true;
+            spawnTimer = spawnCooldown;
+
+            //hasSpawnedDrone = true;
+
             GameObject spawnedInstance = spawnResult.spawnedInstance;
             if (!spawnedInstance)
             {
@@ -145,10 +184,21 @@ namespace NectarRework
             CharacterMaster component = spawnedInstance.GetComponent<CharacterMaster>();
             if ((bool)component)
             {
+                component.inventory.GiveItem(RoR2Content.Items.Hoof, 5);
+                component.inventory.GiveItem(RoR2Content.Items.Syringe, 3);
+
                 Deployable component2 = component.GetComponent<Deployable>();
+
+                if (!(bool)component2)
+                {
+                    component2 = component.gameObject.AddComponent<Deployable>();
+                    component2.onUndeploy = new UnityEvent();
+                    component2.onUndeploy.AddListener(component.TrueKill);
+                }
+
                 if ((bool)component2)
                 {
-                    body.master.AddDeployable(component2, DeployableSlot.DroneWeaponsDrone);
+                    body.master.AddDeployable(component2, wispDeployable);
                 }
             }
         }
@@ -230,9 +280,8 @@ namespace NectarRework
                 return;
             }
 
-            int itemCount = minionInventory.GetItemCount(RoR2Content.Items.BoostDamage);
+            int itemCount = minionInventory.GetItemCount(CustomItems.ItemOrganicAllyBuff);
 
-            // items give +10% to their perspective stat, we need to give the correct stack count with this in mind
             if (itemCount < stack)
             {
                 int count = (stack - itemCount);
