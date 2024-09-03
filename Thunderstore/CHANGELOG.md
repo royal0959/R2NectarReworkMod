@@ -1,3 +1,8 @@
+## 1.1.1
+
+- Fix allies being buffed way more than are intended to be
+- Fix allies buff item being in the loot pool (ops)
+
 ## 1.1.0
 
 - Summoned Greater Wisp is now named Guardian Wisp
