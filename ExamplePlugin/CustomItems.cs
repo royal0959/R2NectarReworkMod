@@ -126,9 +126,9 @@ namespace NectarRework
 
         private static void AddLanguageTokens()
         {
-            LanguageAPI.Add("ITEM_BOOSTALLSTATS_PICKUP", "Summon a <style=cIsUtility>Greater Wisp</style>. All <style=cIsUtility>organic</style> allies are <style=cIsDamage>stronger</style> and <style=cIsDamage>Elite</style>.");
+            LanguageAPI.Add("ITEM_BOOSTALLSTATS_PICKUP", "Summon a <style=cIsUtility>Guardian Wisp</style>. All <style=cIsUtility>organic</style> allies are <style=cIsDamage>stronger</style> and <style=cIsDamage>Elite</style>.");
             LanguageAPI.Add("ITEM_BOOSTALLSTATS_DESC",
-                "Gain an allied <style=cIsUtility>Greater Wisp</style> that respawns every 30 seconds. All <style=cIsUtility>ORGANIC</style> allies will gain  <style=cIsDamage>+200%</style> <style=cStack>(+200% per stack)</style> damage and <style=cIsUtility>+150%</style> <style=cStack>(+150% per stack)</style> health and a random <style=cIsDamage>Elite</style> status.\r\n");
+                "Gain an allied <style=cIsUtility>Guardian Wisp</style> that respawns every 30 seconds. All <style=cIsUtility>ORGANIC</style> allies will gain  <style=cIsDamage>+200%</style> <style=cStack>(+200% per stack)</style> damage and <style=cIsUtility>+150%</style> <style=cStack>(+150% per stack)</style> health and a random <style=cIsDamage>Elite</style> status.\r\n");
         }
     }
 }

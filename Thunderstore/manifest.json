@@ -1,11 +1,12 @@
 ﻿{
 	"name": "GrowthNectarRework",
-	"version_number": "1.0.3",
+	"version_number": "1.1.0",
 	"website_url": "https://github.com/royal0959/R2NectarReworkMod",
 	"description": "Reworks Growth Nectar to greatly buff all organic allies",
 	"dependencies": [
 		"bbepis-BepInExPack-5.4.2108",
 		"RiskofThunder-HookGenPatcher-1.2.3",
+		"RiskofThunder-R2API_Deployable-1.0.1",
 		"RiskofThunder-R2API_Items-1.0.1",
 		"RiskofThunder-R2API_Language-1.0.0"
 	]
