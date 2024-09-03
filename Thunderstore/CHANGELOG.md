@@ -1,3 +1,7 @@
+## 1.1.3
+
+- Embedded new stats in Thunderstore description (for real this time)
+
 ## 1.1.2
 
 - Embedded new stats in Thunderstore description
