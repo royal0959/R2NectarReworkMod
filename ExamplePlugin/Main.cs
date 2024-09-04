@@ -17,11 +17,11 @@ namespace NectarRework
         public const string PluginName = "GrowthNectarRework";
         public const string PluginVersion = "1.0.0";
 
-
         public void Awake()
         {
             Log.Init(Logger);
             CustomItems.Init();
+            Hooks.Init();
         }
 
         // The Update() method is run on every frame of the game.
