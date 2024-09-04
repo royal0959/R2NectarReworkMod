@@ -1,3 +1,9 @@
+## 1.1.4
+
+- Fix internal buff item showing up in logbook
+- Fix damage & health gain from buff item being much higher than it should be
+- Modified item's tags
+
 ## 1.1.3
 
 - Embedded new stats in Thunderstore description (for real this time)

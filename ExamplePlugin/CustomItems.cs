@@ -3,6 +3,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using R2API;
 using RoR2;
+using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
@@ -22,8 +23,22 @@ namespace NectarRework
 
             OverrideDefaultBehavior();
 
+
+
             AddLanguageTokens();
             On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
+            RoR2Application.onLoad += OnLoad;
+        }
+
+        private static void OnLoad()
+        {
+            DLC2Content.Items.BoostAllStats.tags = new[]
+                           {
+                    ItemTag.Damage,
+                    ItemTag.AIBlacklist,
+                    ItemTag.CannotCopy,
+                    ItemTag.BrotherBlacklist
+                };
         }
 
         private static void OverrideDefaultBehavior()
