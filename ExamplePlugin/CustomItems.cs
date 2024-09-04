@@ -65,14 +65,17 @@ namespace NectarRework
             orig(self);
         }
 
-
         private static void CreateOrganicAllyBuff()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             ItemOrganicAllyBuff = new ItemDef
             {
                 name = "OrganicAllyBuff",
-                tier = ItemTier.NoTier,
+                //tier = ItemTier.NoTier,
                 //_itemTierDef = Addressables.LoadAssetAsync<ItemTierDef>("RoR2/Base/Common/Tier3Def.asset").WaitForCompletion(),
+                _itemTierDef = null,
+
+                deprecatedTier = ItemTier.NoTier,
                 pickupModelPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab").WaitForCompletion(),
                 pickupIconSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion(),
                 nameToken = "ITEM_ORGANICALLYBUFF_NAME",
@@ -91,6 +94,7 @@ namespace NectarRework
                 canRemove = false,
                 hidden = true
             };
+#pragma warning restore CS0618 // Type or member is obsolete
 
             var displayRules = new ItemDisplayRuleDict(null);
 
@@ -130,7 +134,7 @@ namespace NectarRework
         {
             LanguageAPI.Add("ITEM_BOOSTALLSTATS_PICKUP", "Summon a <style=cIsUtility>Guardian Wisp</style>. All <style=cIsUtility>organic</style> allies are <style=cIsDamage>stronger</style> and <style=cIsDamage>Elite</style>.");
             LanguageAPI.Add("ITEM_BOOSTALLSTATS_DESC",
-                "Gain an allied <style=cIsUtility>Guardian Wisp</style> that respawns every 30 seconds. All <style=cIsUtility>ORGANIC</style> allies will gain  <style=cIsDamage>+200%</style> <style=cStack>(+200% per stack)</style> damage and <style=cIsUtility>+150%</style> <style=cStack>(+150% per stack)</style> health and a random <style=cIsDamage>Elite</style> status.\r\n");
+                "Gain an allied <style=cIsUtility>Guardian Wisp</style> that respawns every 30 seconds. All <style=cIsUtility>ORGANIC</style> allies will gain <style=cIsDamage>+200%</style> <style=cStack>(+200% per stack)</style> damage and <style=cIsUtility>+150%</style> <style=cStack>(+150% per stack)</style> health and a random <style=cIsDamage>Elite</style> status.\r\n");
         }
     }
 }
