@@ -14,16 +14,16 @@ namespace NectarRework
     {
 
         public static ItemDef ItemOrganicAllyBuff;
+        public static ItemDef ItemWispName;
 
 
         public static void Init()
         {
             //CreateGrowthNectarV2();
             CreateOrganicAllyBuff();
+            CreateWispNameItem();
 
             OverrideDefaultBehavior();
-
-
 
             AddLanguageTokens();
             On.RoR2.CharacterBody.OnInventoryChanged += CharacterBody_OnInventoryChanged;
@@ -32,13 +32,13 @@ namespace NectarRework
 
         private static void OnLoad()
         {
-            DLC2Content.Items.BoostAllStats.tags = new[]
-                           {
+            DLC2Content.Items.BoostAllStats.tags =
+                           [
                     ItemTag.Damage,
                     ItemTag.AIBlacklist,
                     ItemTag.CannotCopy,
                     ItemTag.BrotherBlacklist
-                };
+                ];
         }
 
         private static void OverrideDefaultBehavior()
@@ -114,6 +114,43 @@ namespace NectarRework
             var displayRules = new ItemDisplayRuleDict(null);
 
             var itemIndex = new CustomItem(ItemOrganicAllyBuff, displayRules);
+            ItemAPI.Add(itemIndex);
+        }
+
+        private static void CreateWispNameItem()
+        {
+#pragma warning disable CS0618 // Type or member is obsolete
+            ItemWispName = new ItemDef
+            {
+                name = "GuardianWispName",
+                //tier = ItemTier.NoTier,
+                //_itemTierDef = Addressables.LoadAssetAsync<ItemTierDef>("RoR2/Base/Common/Tier3Def.asset").WaitForCompletion(),
+                _itemTierDef = null,
+
+                deprecatedTier = ItemTier.NoTier,
+                pickupModelPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab").WaitForCompletion(),
+                pickupIconSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion(),
+                nameToken = "ITEM_GUARDIANWISP_NAME",
+                pickupToken = "ITEM_GUARDIANWISP_PICKUP",
+                descriptionToken = "ITEM_GUARDIANWISP_DESC",
+                loreToken = "ITEM_GUARDIANWISP_LORE",
+                tags = new[]
+                {
+                    ItemTag.WorldUnique,
+                    ItemTag.CannotCopy,
+                    ItemTag.CannotDuplicate,
+                    ItemTag.BrotherBlacklist,
+                    ItemTag.CannotSteal,
+                },
+
+                canRemove = false,
+                hidden = true
+            };
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            var displayRules = new ItemDisplayRuleDict(null);
+
+            var itemIndex = new CustomItem(ItemWispName, displayRules);
             ItemAPI.Add(itemIndex);
         }
 

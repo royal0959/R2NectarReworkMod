@@ -1,3 +1,7 @@
+## 1.1.5
+
+- Fix wisp ally not being named
+
 ## 1.1.4
 
 - Fix internal buff item showing up in logbook

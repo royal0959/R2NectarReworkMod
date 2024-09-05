@@ -103,44 +103,6 @@ namespace NectarRework
         public void PostLoad()
         {
             wispDeployable = DeployableAPI.RegisterDeployableSlot(GetWishDeployableSlotLimit);
-            On.RoR2.Util.GetBestBodyName += Util_GetBestBodyName;
-        }
-
-        // rename wisp
-        private string Util_GetBestBodyName(On.RoR2.Util.orig_GetBestBodyName orig, GameObject bodyObject)
-        {
-            string text = orig(bodyObject);
-
-            CharacterBody characterBody = null;
-
-            if ((bool)bodyObject)
-            {
-                characterBody = bodyObject.GetComponent<CharacterBody>();
-            }
-
-            //Log.Info($"characterBody {characterBody} Wisp body {summonedWispBody} Equal: {characterBody == summonedWispBody}");
-
-            if (characterBody != null && characterBody == summonedWispBody)
-            {
-                string wispName = "Guardian Wisp";
-                if (characterBody.isElite)
-                {
-                    BuffIndex[] eliteBuffIndices = BuffCatalog.eliteBuffIndices;
-                    foreach (BuffIndex buffIndex in eliteBuffIndices)
-                    {
-                        if (characterBody.HasBuff(buffIndex))
-                        {
-                            wispName = Language.GetStringFormatted(BuffCatalog.GetBuffDef(buffIndex).eliteDef.modifierToken, wispName);
-                        }
-                    }
-                }
-
-                On.RoR2.Util.GetBestBodyName -= Util_GetBestBodyName;
-
-                return wispName;
-            }
-
-            return text;
         }
 
         private void OnEnable()
@@ -168,8 +130,6 @@ namespace NectarRework
         {
             MasterSummon.onServerMasterSummonGlobal -= OnServerMasterSummonGlobal;
             UpdateAllMinions(0);
-
-            On.RoR2.Util.GetBestBodyName -= Util_GetBestBodyName;
         }
 
         private void FixedUpdate()
@@ -236,6 +196,7 @@ namespace NectarRework
 
                 component.inventory.GiveItem(RoR2Content.Items.Hoof, 3);
                 component.inventory.GiveItem(RoR2Content.Items.Syringe, 2);
+                component.inventory.GiveItem(CustomItems.ItemWispName, 1);
 
                 Deployable component2 = component.GetComponent<Deployable>();
 
