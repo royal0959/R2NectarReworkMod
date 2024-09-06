@@ -1,3 +1,7 @@
+## 1.1.6
+
+- Fix mod breaking ping
+
 ## 1.1.5
 
 - Fix wisp ally not being named

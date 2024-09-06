@@ -44,7 +44,6 @@ namespace NectarRework
         {
             string text = orig(bodyObject);
 
-
             CharacterBody characterBody = null;
 
             if ((bool)bodyObject)
@@ -52,17 +51,17 @@ namespace NectarRework
                 characterBody = bodyObject.GetComponent<CharacterBody>();
             }
 
-            int stack = characterBody.inventory.GetItemCount(CustomItems.ItemWispName);
-
-            if (stack <= 0)
-            {
-                return text;
-            }
-
             //Log.Info($"characterBody {characterBody} Wisp body {summonedWispBody} Equal: {characterBody == summonedWispBody}");
 
             if (characterBody != null)
             {
+                int stack = characterBody.inventory.GetItemCount(CustomItems.ItemWispName);
+
+                if (stack <= 0)
+                {
+                    return text;
+                }
+
                 string wispName = "Guardian Wisp";
                 if (characterBody.isElite)
                 {
